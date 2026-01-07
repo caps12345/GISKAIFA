@@ -12,33 +12,46 @@
         <local:MapViewModel />
     </Window.DataContext>
 
-    <Window.Resources>
-
-    </Window.Resources>
-
     <Grid>
-        <!-- 地图视图 -->
-            <esri:MapView x:Name="MapView"
-                  Map="{Binding Map}"
-                  Loaded="MapView_Loaded">
-            </esri:MapView>
+        <esri:MapView x:Name="MapView" Map="{Binding Map}" />
 
-            <!-- 状态信息 -->
-        <Border Background="#E0FFFFFF" 
-            CornerRadius="5"
-            VerticalAlignment="Top" 
-            HorizontalAlignment="Left"
-            Margin="10"
-            Padding="10"
-            BorderBrush="LightGray"
-            BorderThickness="1">
+        <Border Background="White" 
+                CornerRadius="6"
+                VerticalAlignment="Top" 
+                HorizontalAlignment="Left"
+                Margin="20"
+                Padding="15"
+                BorderBrush="#DDDDDD"
+                BorderThickness="1">
+
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+            </Border.Effect>
+
             <StackPanel>
-                <TextBlock Text="系统状态" FontWeight="Bold" Margin="0,0,0,2"/>
-                <TextBlock Text="{Binding StatusMessage}" 
-                       Foreground="#1976D3"
-                       FontWeight="SemiBold"
-                       TextWrapping="Wrap"
-                       MaxWidth="200"/>
+                <TextBlock Text="南京公共卫生应急响应系统" 
+                           FontSize="18" 
+                           FontWeight="Bold" 
+                           Foreground="#333"
+                           Margin="0,0,0,8"/>
+
+                <Separator Background="#EEE" Margin="0,0,0,8"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBlock Text="系统状态：" FontWeight="Bold" Foreground="#555"/>
+                    <TextBlock Text="{Binding StatusMessage}" 
+                               Foreground="#1976D3" 
+                               FontWeight="SemiBold"
+                               MaxWidth="250"
+                               TextWrapping="NoWrap"
+                               TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Text="图层图例：" FontWeight="Bold" Foreground="#555" Margin="0,0,5,0"/>
+                    <Rectangle Width="14" Height="14" Fill="#32FF0000" Stroke="Red" StrokeThickness="2" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="南京市行政边界" Foreground="#333" VerticalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>
