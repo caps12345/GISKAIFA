@@ -1,0 +1,104 @@
+﻿<Window x:Class="WpfMapApp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+        xmlns:local="clr-namespace:WpfMapApp2"
+        mc:Ignorable="d"
+        Title="南京公共卫生应急响应系统" Height="700" Width="1000">
+
+    <Window.DataContext>
+        <local:MapViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <esri:MapView x:Name="MapView" Map="{Binding Map}" GeoViewTapped="MapView_GeoViewTapped" />
+
+        <Border Background="White" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Left"
+                Margin="20" Padding="15" BorderBrush="#DDDDDD" BorderThickness="1" Width="280">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="4" Opacity="0.15"/>
+            </Border.Effect>
+
+            <StackPanel>
+                <TextBlock Text="南京公卫应急响应系统" FontSize="16" FontWeight="Bold" Foreground="#333" Margin="0,0,0,5"/>
+                <Separator Background="#EEE" Margin="0,0,0,10"/>
+
+                <Expander Header="基础医疗资源分布" IsExpanded="False" Margin="0,0,0,5">
+                    <StackPanel Margin="10,5,0,5">
+                        <CheckBox x:Name="chkHospitals" Content="显示医院点位" IsChecked="True" Checked="HospitalLayer_Checked" Unchecked="HospitalLayer_Unchecked" Margin="0,0,0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,2">
+                            <Ellipse Width="10" Height="10" Fill="Red" Margin="0,0,8,0"/>
+                            <TextBlock Text="三级医院" FontSize="11"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,2">
+                            <Ellipse Width="10" Height="10" Fill="Blue" Margin="0,0,8,0"/>
+                            <TextBlock Text="二级医院" FontSize="11"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,2">
+                            <Ellipse Width="10" Height="10" Fill="Green" Margin="0,0,8,0"/>
+                            <TextBlock Text="社区医院" FontSize="11"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
+
+                <TextBlock Text="F4: 供需压力分层诊断" FontWeight="Bold" Foreground="#1976D3" FontSize="13" Margin="0,10,0,5"/>
+                <Separator Background="#EEE" Margin="0,0,0,8"/>
+
+                <TextBlock Text="1. 诊断场景:" FontWeight="SemiBold" FontSize="11" Foreground="#555" Margin="0,0,0,4"/>
+                <StackPanel Orientation="Vertical" Margin="5,0,0,10">
+                    <RadioButton x:Name="rbModeA" Content="模式 A: 综合基础医疗 (默认)" IsChecked="True" GroupName="Mode" FontSize="12" Margin="0,0,0,4"/>
+                    <RadioButton x:Name="rbModeB" Content="模式 B: 高端优质资源 (High-End)" IsChecked="False" GroupName="Mode" FontSize="12" Foreground="#C0392B"/>
+                </StackPanel>
+
+                <TextBlock Text="2. 资源权重偏好:" FontWeight="SemiBold" FontSize="11" Foreground="#555" Margin="0,0,0,4"/>
+                <ComboBox x:Name="cbDiseaseType" SelectedIndex="0" Margin="5,0,0,10" Padding="4">
+                    <ComboBoxItem Content="日常综合 (均衡权重)" Tag="General"/>
+                    <ComboBoxItem Content="急危重症 (侧重医生/技术)" Tag="Critical"/>
+                    <ComboBoxItem Content="呼吸/传染 (侧重床位/隔离)" Tag="Infectious"/>
+                </ComboBox>
+
+                <Button Content="执行分层诊断分析" Click="BtnAnalyze_Click" 
+                        Background="#1976D3" Foreground="White" FontWeight="Bold" Padding="6" Margin="0,0,0,15" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="4"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <TextBlock Text="3. 可视化算法选择:" FontWeight="SemiBold" FontSize="11" Foreground="#555" Margin="0,0,0,4"/>
+
+                <CheckBox x:Name="chkIDW"
+                          Content="IDW 插值 (锐利)" 
+                          IsChecked="True"
+                          Checked="IDWLayer_Checked"
+                          Unchecked="IDWLayer_Unchecked"
+                          FontSize="12" Margin="5,0,0,2"/>
+
+                <CheckBox x:Name="chkKDE"
+                          Content="KDE 核密度 (柔和)" 
+                          IsChecked="False"
+                          Checked="KDELayer_Checked"
+                          Unchecked="KDELayer_Unchecked"
+                          FontSize="12" Margin="5,0,0,8"/>
+
+                <StackPanel Margin="5,0,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="0,3">
+                        <Ellipse Width="10" Height="10" Fill="#D0FF0000" Margin="0,0,10,0"/>
+                        <TextBlock Text="高压力 (资源紧缺)" FontSize="11" Foreground="#CC0000"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3">
+                        <Ellipse Width="10" Height="10" Fill="#D0FFFF00" Margin="0,0,10,0"/>
+                        <TextBlock Text="中压力 (供需平衡)" FontSize="11" Foreground="#999900"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3">
+                        <Ellipse Width="10" Height="10" Fill="#D000FF00" Margin="0,0,10,0"/>
+                        <TextBlock Text="低压力 (资源充足)" FontSize="11" Foreground="Green"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
